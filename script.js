@@ -1,6 +1,9 @@
 const container = document.querySelector(".container");
-let iconselector = true
+const xButton = document.getElementById("1b");
+const oButton = document.getElementById("2b");
+let iconselector
 let squareArray = Array(9).fill("")
+let winCount = []
 
 function clickXO (e) {
     let i
@@ -21,12 +24,14 @@ function clickXO (e) {
 }
 
 function createSquares () {
+    container.innerHTML = ''
     for (let i = 0; i < 9; i++) {
         let square = document.createElement("img");
         square.setAttribute("id", i)
         square.classList.add("square");
-        container.appendChild(square);
         square.classList.add("square");
+        container.appendChild(square);
+        // container.style.display = "block"
 
         // square.addEventListener("mouseover", () => {
         //     square.classList.add("change");
@@ -40,8 +45,6 @@ function createSquares () {
         
     }
 }
-
-createSquares()
 
 function checkWin (icon) {
     const winCombinations = [
@@ -62,8 +65,60 @@ function checkWin (icon) {
     let [a,b,c] = x
         // First Row Win
         if (squareArray[a] === icon && squareArray[b] === icon && squareArray[c] === icon ) {
-            console.log(`${squareArray[0]} Wins`)
+            console.log(`${icon} Wins`)
+            winCount.push(icon)
+            console.log(winCount)
+            clearBoard()
             return
         } 
     })
 }
+
+function clearBoard () {
+    let timeout = 2000
+    setTimeout(() => {
+        createSquares()
+        squareArray = Array(9).fill("")
+        iconselector = true      
+    }, timeout);
+}
+
+
+function initializer () {
+    let info = document.createElement("p");
+    info.innerHTML = "Choose an Icon"
+    let bs = document.querySelector(".buttons")
+    bs.appendChild(info)
+    
+    const buttonHandler = (e) => {
+        if (e.target===xButton) {
+            iconselector = false
+        } else if (e.target===oButton) {
+            iconselector = true
+        }
+
+        xButton.removeEventListener("click", buttonHandler)
+        oButton.removeEventListener("click", buttonHandler)
+        console.log(iconselector)
+
+        setTimeout(() => {
+            xButton.innerText = "Human v Human"
+            oButton.innerText = "Human v Computer"            
+        }, 2000);
+        
+    }
+
+    xButton.addEventListener("click", buttonHandler)
+    oButton.addEventListener("click", buttonHandler)
+
+    let time = setInterval(() => {
+        if (xButton.innerHTML === "Human v Human") {
+            xButton.addEventListener("click", createSquares)
+            alert()
+            clearInterval(time)
+        }        
+    }, 1000);
+        
+}
+
+initializer()
