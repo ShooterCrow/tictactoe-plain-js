@@ -31,7 +31,8 @@ function createSquares () {
         square.classList.add("square");
         square.classList.add("square");
         container.appendChild(square);
-        // container.style.display = "block"
+        container.style.display = "flex";
+        document.querySelector(".buttons").innerHTML = ""
 
         // square.addEventListener("mouseover", () => {
         //     square.classList.add("change");
@@ -103,21 +104,18 @@ function initializer () {
 
         setTimeout(() => {
             xButton.innerText = "Human v Human"
-            oButton.innerText = "Human v Computer"            
-        }, 2000);
+            oButton.innerText = "Human v Computer"  
+            if (xButton.innerHTML === "Human v Human") {
+                xButton.addEventListener("click", createSquares)
+                oButton.addEventListener("click", createSquaresC)
+            }            
+        }, 1000);
         
     }
 
     xButton.addEventListener("click", buttonHandler)
     oButton.addEventListener("click", buttonHandler)
 
-    let time = setInterval(() => {
-        if (xButton.innerHTML === "Human v Human") {
-            xButton.addEventListener("click", createSquares)
-            alert()
-            clearInterval(time)
-        }        
-    }, 1000);
         
 }
 
