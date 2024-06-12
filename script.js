@@ -3,19 +3,21 @@ let iconselector = true
 let squareArray = Array(9).fill("")
 
 function clickXO (e) {
+    let i
     if (iconselector === true) {
         e.target.setAttribute("src", "O-icon.png");
-        // console.log(squareArray, e.target)
         squareArray[e.target.id] = "O"
+        i = "O"
+
     } else {
         e.target.setAttribute("src", "X-icon.png")
         squareArray[e.target.id] = "X"
-        // console.log(squareArray, e.target)
+        i = "X"
     }
     iconselector = !iconselector
     e.target.removeEventListener("click", clickXO);
     e.target.classList.toggle("change");
-    checkWin()
+    checkWin(i)
 }
 
 function createSquares () {
@@ -56,21 +58,12 @@ function checkWin (icon) {
         [2, 4, 6],
     ]
     
-    squareArray.forEach((x) => {
+    winCombinations.forEach((x) => {
+    let [a,b,c] = x
         // First Row Win
-        if (squareArray[0] === squareArray[1] && squareArray[1] === squareArray[2] && squareArray[0] !== "") {
+        if (squareArray[a] === icon && squareArray[b] === icon && squareArray[c] === icon ) {
             console.log(`${squareArray[0]} Wins`)
             return
-        }
-        // Second Row Win
-        if (squareArray[3] === squareArray[4] && squareArray[4] === squareArray[5] && squareArray[3] !== "") {
-            console.log(`${squareArray[3]} Wins`)
-            return
-        }
-        // 3rd Row Win
-        if (squareArray[6] === squareArray[7] && squareArray[7] === squareArray[8] && squareArray[6] !== "") {
-            console.log(`${squareArray[6]} Wins`)
-            return
-        }
+        } 
     })
 }
