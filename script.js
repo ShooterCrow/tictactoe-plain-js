@@ -6,6 +6,7 @@ let computerPlay = false
 let computerIcon
 let userIcon
 let squareArray = Array(9).fill("")
+let compPicDisplay = squareArray
 let winCount = []
 let currentPlayer
 
@@ -21,18 +22,30 @@ function iconInitializer () {
 
 function cp() {
     if (currentPlayer === "c") {
-
+        let random
         setTimeout(() => {
-            let random = Math.floor(Math.random() * 9)
+            do {
+                random = Math.floor(Math.random() * squareArray.length) 
+                console.log(random)               
+            } while (random == "Taken");
+
+            
             let compSquareDisplay = document.getElementById(random);
             console.log(compSquareDisplay)
+            while (compSquareDisplay.src) {
+                let updatedCCSA = compCjooseSquareArr.filter(x=> x==random)
+                compSquareDisplay = document.getElementById(updatedCCSA[random]);
+                compCjooseSquareArr = updatedCCSA
+                console.log(compCjooseSquareArr, updatedCCSA, random)
+            }
             if (computerIcon === "X") {
                 compSquareDisplay.setAttribute("src", "X-icon.png")
-            } else {
-                compSquareDisplay.setAttribute("src", "X-icon.png")
+            } else if (computerIcon === "O"){
+                compSquareDisplay.setAttribute("src", "O-icon.png")
             }
             squareArray[random] = computerIcon
-            console.log(squareArray)
+            compSquareDisplay.removeEventListener("click", clickXO)
+            // console.log(squareArray)
             currentPlayer = "h"
             return
         }, 1000);
@@ -61,6 +74,8 @@ function clickXO(e) {
                 e.target.setAttribute("src", "X-icon.png")
             }
             currentPlayer = "c"
+            squareArray[e.target.id] = "Taken"
+            console.log(squareArray, e.target.id)
             cp()
             return
         }
