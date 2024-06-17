@@ -13,13 +13,15 @@ let currentPlayer
 function checkDuplicate() {
     let random
     if (squresTakenArray.includes("")) {
-        console.log(squresTakenArray)
+        do {
+            random = Math.floor(Math.random() * squareArray.length)
+            console.log(999999999)
+        } while (squresTakenArray[random] == "Taken");
+        return random
+    } else {
+        console.error("No Available Squares")
+        return -1
     }
-    do {
-        random = Math.floor(Math.random() * squareArray.length)
-        console.log(999999999)
-    } while (squresTakenArray[random] == "Taken");
-    return random
 }
 
 function iconInitializer() {
