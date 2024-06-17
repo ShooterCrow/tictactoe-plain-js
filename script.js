@@ -12,14 +12,17 @@ let currentPlayer
 
 function checkDuplicate() {
     let random
+    if (squresTakenArray.includes("")) {
+        console.log(squresTakenArray)
+    }
     do {
-        random = Math.floor(Math.random() * squareArray.length) 
-        console.log("Random is", random, 'not Tajen, Tajen is', squareArray[random])               
+        random = Math.floor(Math.random() * squareArray.length)
+        console.log(999999999)
     } while (squresTakenArray[random] == "Taken");
     return random
 }
 
-function iconInitializer () {
+function iconInitializer() {
     if (!iconselector) {
         userIcon = "X"
         computerIcon = "O"
@@ -30,60 +33,61 @@ function iconInitializer () {
 }
 
 function cp() {
+    let cI
     if (currentPlayer === "c") {
         setTimeout(() => {
-             let random = checkDuplicate()          
+            let random = checkDuplicate()
             let compSquareDisplay = document.getElementById(random);
-            console.log(compSquareDisplay)
             if (computerIcon === "X") {
                 compSquareDisplay.setAttribute("src", "X-icon.png")
-            } else if (computerIcon === "O"){
+            } else if (computerIcon === "O") {
                 compSquareDisplay.setAttribute("src", "O-icon.png")
             }
-            squresTakenArray[compSquareDisplay.id] = "Taken"
             squareArray[random] = computerIcon
+            squresTakenArray[compSquareDisplay.id] = "Taken"
             compSquareDisplay.removeEventListener("click", clickXO)
-            console.log(squareArray, squresTakenArray, random, compSquareDisplay.id)
+            // console.log(squareArray, squresTakenArray, random, compSquareDisplay.id)
             currentPlayer = "h"
             return
-        }, 1000);
+        }, 2000);
 
-    }
+    } if (currentPlayer === 'h') console.log(99)
 
 }
 
-function hp() {
+function hp(e) {
+        console.log("Human Picj", userIcon)
+        if (userIcon === "O") {
+            e.target.setAttribute("src", "O-icon.png")
+        } else {
+            e.target.setAttribute("src", "X-icon.png")
+        }
+        squareArray[e.target.id] = userIcon
+        squresTakenArray[e.target.id] = "Taken"
+        currentPlayer = "c"
+        console.log(squareArray, e.target.id)
+        cp()
 }
 
 function clickXO(e) {
-    let i
 
     if (computerPlay) {
         if ((squareArray.includes(""))) {
-            if (currentPlayer === "h") {
-    
-                console.log("Human Picj", userIcon)
-                if (userIcon === "O") {
-                    e.target.setAttribute("src", "O-icon.png")
-                } else {
-                    e.target.setAttribute("src", "X-icon.png")
-                }
-                squareArray[e.target.id] = userIcon
-                squresTakenArray[e.target.id] = "Taken"
-                currentPlayer = "c"
-                console.log(squareArray, e.target.id)
-                // checkWin(cI)
+            if (currentPlayer === 'c') {
                 cp()
-                return
-            }            
-        }  
+            }
+            if (currentPlayer === 'h') {
+                hp(e)
+            }
+            checkWin(computerIcon)
+            checkWin(userIcon)
+        }
 
 
     }
 
     if (!computerPlay) {
-
-
+        let i
         if (iconselector === true) {
             e.target.setAttribute("src", "O-icon.png");
             squareArray[e.target.id] = "O"
@@ -94,15 +98,14 @@ function clickXO(e) {
             squareArray[e.target.id] = "X"
             i = "X"
         }
+        checkWin(i)
 
     }
-
 
 
     iconselector = !iconselector
     e.target.removeEventListener("click", clickXO);
     e.target.classList.toggle("change");
-    checkWin(i)
 }
 
 function createSquares() {
@@ -130,16 +133,11 @@ function createSquares() {
 function checkWin(icon) {
     const winCombinations = [
         // Row Wins
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], 
         // Column Wins
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], 
         // Diagonal Wins
-        [0, 4, 8],
-        [2, 4, 6],
+        [0, 4, 8], [2, 4, 6],
     ]
 
     winCombinations.forEach((x) => {
@@ -156,10 +154,11 @@ function checkWin(icon) {
 }
 
 function clearBoard() {
-    let timeout = 2000
+    let timeout = 2100
     setTimeout(() => {
         createSquares()
         squareArray = Array(9).fill("")
+        squresTakenArray = Array(9).fill("")
         iconselector = true
     }, timeout);
 }
