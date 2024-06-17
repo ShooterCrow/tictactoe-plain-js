@@ -6,9 +6,18 @@ let computerPlay = false
 let computerIcon
 let userIcon
 let squareArray = Array(9).fill("")
-let compPicDisplay = squareArray
+let squresTakenArray = Array(9).fill("")
 let winCount = []
 let currentPlayer
+
+function checkDuplicate() {
+    let random
+    do {
+        random = Math.floor(Math.random() * squareArray.length) 
+        console.log("Random is", random, 'not Tajen, Tajen is', squareArray[random])               
+    } while (squresTakenArray[random] == "Taken");
+    return random
+}
 
 function iconInitializer () {
     if (!iconselector) {
@@ -22,30 +31,19 @@ function iconInitializer () {
 
 function cp() {
     if (currentPlayer === "c") {
-        let random
         setTimeout(() => {
-            do {
-                random = Math.floor(Math.random() * squareArray.length) 
-                console.log(random)               
-            } while (random == "Taken");
-
-            
+             let random = checkDuplicate()          
             let compSquareDisplay = document.getElementById(random);
             console.log(compSquareDisplay)
-            while (compSquareDisplay.src) {
-                let updatedCCSA = compCjooseSquareArr.filter(x=> x==random)
-                compSquareDisplay = document.getElementById(updatedCCSA[random]);
-                compCjooseSquareArr = updatedCCSA
-                console.log(compCjooseSquareArr, updatedCCSA, random)
-            }
             if (computerIcon === "X") {
                 compSquareDisplay.setAttribute("src", "X-icon.png")
             } else if (computerIcon === "O"){
                 compSquareDisplay.setAttribute("src", "O-icon.png")
             }
+            squresTakenArray[compSquareDisplay.id] = "Taken"
             squareArray[random] = computerIcon
             compSquareDisplay.removeEventListener("click", clickXO)
-            // console.log(squareArray)
+            console.log(squareArray, squresTakenArray, random, compSquareDisplay.id)
             currentPlayer = "h"
             return
         }, 1000);
@@ -61,24 +59,24 @@ function clickXO(e) {
     let i
 
     if (computerPlay) {
-
-        console.log(computerPlay)
-
-        if (currentPlayer === "h") {
-
-            console.log("Human Picj", userIcon)
-            squareArray[e.target.id] = userIcon
-            if (userIcon === "O") {
-                e.target.setAttribute("src", "O-icon.png")
-            } else {
-                e.target.setAttribute("src", "X-icon.png")
-            }
-            currentPlayer = "c"
-            squareArray[e.target.id] = "Taken"
-            console.log(squareArray, e.target.id)
-            cp()
-            return
-        }
+        if ((squareArray.includes(""))) {
+            if (currentPlayer === "h") {
+    
+                console.log("Human Picj", userIcon)
+                if (userIcon === "O") {
+                    e.target.setAttribute("src", "O-icon.png")
+                } else {
+                    e.target.setAttribute("src", "X-icon.png")
+                }
+                squareArray[e.target.id] = userIcon
+                squresTakenArray[e.target.id] = "Taken"
+                currentPlayer = "c"
+                console.log(squareArray, e.target.id)
+                // checkWin(cI)
+                cp()
+                return
+            }            
+        }  
 
 
     }
