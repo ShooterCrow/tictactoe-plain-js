@@ -24,7 +24,7 @@ function cp() {
 
         setTimeout(() => {
             let random = Math.floor(Math.random() * 9)
-            let compSquareDisplay = document.getElementById("random");
+            let compSquareDisplay = document.getElementById(random);
             console.log(compSquareDisplay)
             if (computerIcon === "X") {
                 compSquareDisplay.setAttribute("src", "X-icon.png")
@@ -70,7 +70,6 @@ function clickXO(e) {
 
     if (!computerPlay) {
 
-        console.log(computerPlay)
 
         if (iconselector === true) {
             e.target.setAttribute("src", "O-icon.png");
@@ -172,7 +171,6 @@ function initializer() {
         oButton.removeEventListener("click", buttonHandler)
 
         setTimeout(() => {
-            console.log(computerPlay)
             xButton.innerText = "Human v Human"
             oButton.innerText = "Human v Computer"
             if (xButton.innerHTML === "Human v Human") {
@@ -190,7 +188,7 @@ function initializer() {
         createSquares()
         iconInitializer()
         computerPlay = true
-        clickXO()
+        // clickXO()
     }
 
 
