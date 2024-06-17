@@ -2,28 +2,98 @@ const container = document.querySelector(".container");
 const xButton = document.getElementById("1b");
 const oButton = document.getElementById("2b");
 let iconselector
+let computerPlay = false
+let computerIcon
+let userIcon
 let squareArray = Array(9).fill("")
 let winCount = []
+let currentPlayer
 
-function clickXO (e) {
-    let i
-    if (iconselector === true) {
-        e.target.setAttribute("src", "O-icon.png");
-        squareArray[e.target.id] = "O"
-        i = "O"
-
+function iconInitializer () {
+    if (!iconselector) {
+        userIcon = "X"
+        computerIcon = "O"
     } else {
-        e.target.setAttribute("src", "X-icon.png")
-        squareArray[e.target.id] = "X"
-        i = "X"
+        userIcon = "O"
+        computerIcon = "X"
     }
+}
+
+function cp() {
+    if (currentPlayer === "c") {
+
+        setTimeout(() => {
+            let random = Math.floor(Math.random() * 9)
+            let compSquareDisplay = document.getElementById("random");
+            console.log(compSquareDisplay)
+            if (computerIcon === "X") {
+                compSquareDisplay.setAttribute("src", "X-icon.png")
+            } else {
+                compSquareDisplay.setAttribute("src", "X-icon.png")
+            }
+            squareArray[random] = computerIcon
+            console.log(squareArray)
+            currentPlayer = "h"
+            return
+        }, 1000);
+
+    }
+
+}
+
+function hp() {
+}
+
+function clickXO(e) {
+    let i
+
+    if (computerPlay) {
+
+        console.log(computerPlay)
+
+        if (currentPlayer === "h") {
+
+            console.log("Human Picj", userIcon)
+            squareArray[e.target.id] = userIcon
+            if (userIcon === "O") {
+                e.target.setAttribute("src", "O-icon.png")
+            } else {
+                e.target.setAttribute("src", "X-icon.png")
+            }
+            currentPlayer = "c"
+            cp()
+            return
+        }
+
+
+    }
+
+    if (!computerPlay) {
+
+        console.log(computerPlay)
+
+        if (iconselector === true) {
+            e.target.setAttribute("src", "O-icon.png");
+            squareArray[e.target.id] = "O"
+            i = "O"
+
+        } else {
+            e.target.setAttribute("src", "X-icon.png")
+            squareArray[e.target.id] = "X"
+            i = "X"
+        }
+
+    }
+
+
+
     iconselector = !iconselector
     e.target.removeEventListener("click", clickXO);
     e.target.classList.toggle("change");
     checkWin(i)
 }
 
-function createSquares () {
+function createSquares() {
     container.innerHTML = ''
     for (let i = 0; i < 9; i++) {
         let square = document.createElement("img");
@@ -40,14 +110,12 @@ function createSquares () {
         // square.addEventListener("mouseleave", () => {
         //     square.classList.remove("change");
         // });
-        
-
         square.addEventListener("click", clickXO);
-        
+
     }
 }
 
-function checkWin (icon) {
+function checkWin(icon) {
     const winCombinations = [
         // Row Wins
         [0, 1, 2],
@@ -61,62 +129,71 @@ function checkWin (icon) {
         [0, 4, 8],
         [2, 4, 6],
     ]
-    
+
     winCombinations.forEach((x) => {
-    let [a,b,c] = x
+        let [a, b, c] = x
         // First Row Win
-        if (squareArray[a] === icon && squareArray[b] === icon && squareArray[c] === icon ) {
+        if (squareArray[a] === icon && squareArray[b] === icon && squareArray[c] === icon) {
             console.log(`${icon} Wins`)
             winCount.push(icon)
             console.log(winCount)
             clearBoard()
             return
-        } 
+        }
     })
 }
 
-function clearBoard () {
+function clearBoard() {
     let timeout = 2000
     setTimeout(() => {
         createSquares()
         squareArray = Array(9).fill("")
-        iconselector = true      
+        iconselector = true
     }, timeout);
 }
 
 
-function initializer () {
+function initializer() {
     let info = document.createElement("p");
     info.innerHTML = "Choose an Icon"
     let bs = document.querySelector(".buttons")
     bs.appendChild(info)
-    
+
     const buttonHandler = (e) => {
-        if (e.target===xButton) {
+        if (e.target === xButton) {
             iconselector = false
-        } else if (e.target===oButton) {
+            currentPlayer = "h"
+        } else if (e.target === oButton) {
             iconselector = true
+            currentPlayer = "c"
         }
 
         xButton.removeEventListener("click", buttonHandler)
         oButton.removeEventListener("click", buttonHandler)
-        console.log(iconselector)
 
         setTimeout(() => {
+            console.log(computerPlay)
             xButton.innerText = "Human v Human"
-            oButton.innerText = "Human v Computer"  
+            oButton.innerText = "Human v Computer"
             if (xButton.innerHTML === "Human v Human") {
                 xButton.addEventListener("click", createSquares)
-                oButton.addEventListener("click", createSquaresC)
-            }            
+                oButton.addEventListener("click", computerSetup)
+            }
         }, 1000);
-        
+
     }
 
     xButton.addEventListener("click", buttonHandler)
     oButton.addEventListener("click", buttonHandler)
 
-        
+    function computerSetup() {
+        createSquares()
+        iconInitializer()
+        computerPlay = true
+        clickXO()
+    }
+
+
 }
 
 initializer()
