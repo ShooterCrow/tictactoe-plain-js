@@ -1,6 +1,8 @@
 const container = document.querySelector(".container");
 const xButton = document.getElementById("1b");
 const oButton = document.getElementById("2b");
+const bs = document.querySelector(".buttons");
+const currentPInfo = document.querySelector(".currentpinfo");
 let iconselector
 let computerPlay = false
 let computerIcon
@@ -9,6 +11,18 @@ let squareArray = Array(9).fill("")
 let squresTakenArray = Array(9).fill("")
 let winCount = []
 let currentPlayer
+currentPInfo.style.fontWeight = "bold"
+
+function elementCreator(name, type, attType, att, className, parent, eType, eFunc) {
+    name = document.createElement(type)
+    if ((attType, att, className)) {
+        name.setAttribute(attType, att)
+        name.classList.add(className);
+    }
+    parent.appendChild(name);
+    name.addEventListener(eType, eFunc)
+    return name
+}
 
 function checkDuplicate() {
     let random
@@ -49,10 +63,13 @@ function cp() {
             compSquareDisplay.removeEventListener("click", clickXO)
             checkWin(computerIcon)
             currentPlayer = "h"
+            // Current Player Display
+            currentPInfo.innerText = "Your Turn"
+            currentPInfo.style.color = "green"
             return
         }, 2000);
 
-    } if (currentPlayer === 'h') console.log(99)
+    }
 
 }
 
@@ -78,6 +95,8 @@ function clickXO(e) {
             }
             if (currentPlayer === 'h') {
                 hp(e)
+                currentPInfo.innerText = "Computer's Turn"
+                currentPInfo.style.color = "white"
             }
         }
     }
@@ -95,38 +114,24 @@ function clickXO(e) {
             i = "X"
         }
         checkWin(i)
+        squresTakenArray[e.target.id] = "Taken"
     }
     iconselector = !iconselector
     e.target.removeEventListener("click", clickXO);
-    // e.target.classList.toggle("change");
 }
 
 function createBoard() {
     container.innerHTML = ''
     for (let i = 0; i < 9; i++) {
         //Squares
-        let square = document.createElement("img");
-        square.setAttribute("id", i)
-        square.classList.add("square");
-        container.appendChild(square);
+        elementCreator("square", "img", "id", i, "square", container, "click", clickXO)
         document.querySelector(".buttons").innerHTML = ""
-        
-
-        // square.addEventListener("mouseover", () => {
-        //     square.classList.add("change");
-        // });
-        // square.addEventListener("mouseleave", () => {
-        //     square.classList.remove("change");
-        // });
-        square.addEventListener("click", clickXO);
 
     }
     container.style.display = "flex";
     //Reset Button
-    let resetButton = document.createElement("button");
-    resetButton.innerText = "Reset";
-    resetButton.addEventListener("click", clearBoard)
-    container.appendChild(resetButton)
+    elementCreator("resetButton", "button", null, null, null, container, "click", clearBoard).innerText = "Reset";
+    elementCreator("resetButton", "button", null, null, null, container, "click", startOver).innerText = "Restart";
 }
 
 function checkWin(icon) {
@@ -145,7 +150,7 @@ function checkWin(icon) {
         if (squareArray[a] === icon && squareArray[b] === icon && squareArray[c] === icon) {
             console.log(`${icon} Wins`)
             winCount.push(icon)
-            console.log(winCount)
+            alert(icon + " Wins")
             clearBoard()
             return
         }
@@ -153,7 +158,9 @@ function checkWin(icon) {
 }
 
 function clearBoard() {
+    console.log(99)
     if (squresTakenArray.includes("Taken")) {
+        console.log(11)
         let timeout = 1000
         setTimeout(() => {
             createBoard()
@@ -164,11 +171,15 @@ function clearBoard() {
     }
 }
 
+// console.log(container.childNodes)
+function startOver() {
+    location.reload()
+}
+
 
 function initializer() {
     let info = document.createElement("p");
     info.innerHTML = "Choose an Icon"
-    let bs = document.querySelector(".buttons")
     bs.appendChild(info)
 
     const buttonHandler = (e) => {
@@ -202,7 +213,9 @@ function initializer() {
         iconInitializer()
         computerPlay = true
         if (currentPlayer == "c") {
-            alert("Click Any Square to Start")
+            setTimeout(() => {
+                alert("Click Any Square to Start")
+            }, 500);
         }
     }
 

@@ -1,6 +1,8 @@
 * {
     box-sizing: border-box;
-    /* border: 1px solid; */
+    background-color: rgb(3, 3, 24);
+    color: white;
+    font-family: poppins;
 }
 
 body {
@@ -12,9 +14,14 @@ body {
 }
 
 .square {
-    border: 1px solid;
+    background-color: rgb(27, 27, 77);
     width: 100px;
     height: 100px;
+    border-radius: 5px;
+    margin: 0 5px 5px 0;
+    color: rgb(0, 0, 141);
+    padding: 15px;
+    cursor: pointer;
 }
 
 .buttons {
@@ -30,11 +37,17 @@ button {
 }
 
 .container {
-    width: 300px;
+    width: 315px;
     height: 300px;
-    /* min-height: 300px; */
+    /* min-height: 250px; */
     display: flex;
     flex-wrap: wrap;
     /* border: 1px solid; */
     display: none;
+}
+
+img {
+    outline: none;
+    border: none;
+    background-color: rgb(3, 3, 24);
 }
